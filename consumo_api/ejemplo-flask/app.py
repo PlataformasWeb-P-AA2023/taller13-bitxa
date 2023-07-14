@@ -5,57 +5,31 @@ from config import usuario, clave
 
 app = Flask(__name__, template_folder='templates')
 
+django_api_base_url = "http://127.0.0.1:8000/api/"
+
 @app.route("/")
 def hello_world():
     return "<p>Hello, World!</p>"
 
-
-@app.route("/losestudiantes")
-def los_estudiantes():
+@app.route("/departamentos")
+def departamentos():
     """
     """
-    r = requests.get("http://127.0.0.1:8000/api/estudiantes/",
+    r = requests.get(django_api_base_url + "departamentos/",
             auth=(usuario, clave))
-    estudiantes = json.loads(r.content)['results']
-    numero_estudiantes = json.loads(r.content)['count']
-    return render_template("losestudiantes.html", estudiantes=estudiantes,
-    numero_estudiantes=numero_estudiantes)
+    departamentos = json.loads(r.content)['results']
+    numero_departamentos = json.loads(r.content)['count']
+    return render_template("departamentos.html", departamentos=departamentos,
+                           numero_departamentos=numero_departamentos)
 
-
-@app.route("/lostelefonos")
-def los_telefonos():
+@app.route("/edificios")
+def edificios():
     """
     """
-    r = requests.get("http://127.0.0.1:8000/api/numerost/",
+    r = requests.get(django_api_base_url + "edificios/",
             auth=(usuario, clave))
-    datos = json.loads(r.content)['results']
-    numero = json.loads(r.content)['count']
-    return render_template("lostelefonos.html", datos=datos,
-    numero=numero)
+    edificios = json.loads(r.content)['results']
+    numero_edificios = json.loads(r.content)['count']
+    return render_template("edificios.html", edificios=edificios,
+                           numero_edificios=numero_edificios)
 
-
-@app.route("/lostelefonosdos")
-def los_telefonos_dos():
-    """
-    """
-    r = requests.get("http://127.0.0.1:8000/api/numerost/",
-            auth=(usuario, clave))
-    datos = json.loads(r.content)['results']
-    numero = json.loads(r.content)['count']
-    datos2 = []
-    for d in datos:
-        datos2.append({'telefono':d['telefono'], 'tipo':d['tipo'],
-        'estudiante': obtener_estudiante(d['estudiante'])})
-    return render_template("lostelefonosdos.html", datos=datos2,
-    numero=numero)
-
-# funciones ayuda
-
-def obtener_estudiante(url):
-    """
-    """
-    r = requests.get(url, auth=(usuario, clave))
-    nombre_estudiante = json.loads(r.content)['nombre']
-    apellido_estudiante = json.loads(r.content)['apellido']
-    cadena = "%s %s" % (nombre_estudiante, apellido_estudiante)
-    return cadena
