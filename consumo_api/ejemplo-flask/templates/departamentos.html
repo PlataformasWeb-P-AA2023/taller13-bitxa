@@ -6,17 +6,17 @@
     <title>Departamentos - 1</title>
   </head>
   <body>
-    <h5>Listado de departamentos - {{numero}}</h5>
+    <h5>Listado de departamentos - {{numero_departamentos}}</h5>
 
-    {% for departamento in datos %}
+    {% for departamento in departamentos %}
 
     <ol>
-      <li><b>Nombre Propietario: </b>{{departamento['nombrePropietario']}}</li>
+      <li><b>Propietario: </b>{{departamento['propietario']}}</li>
       <li><b>Costo: </b>{{departamento['costo']}}</li>
       <li><b>Número de Cuartos: </b>{{departamento['num_cuartos']}}</li>
       <li><b>Edificio: </b>{{departamento['edificio']}}</li>
     </ol>
-    <hr>
+    <hr />
     {% endfor%}
   </body>
 </html>

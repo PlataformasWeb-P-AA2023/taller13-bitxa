@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelChoiceField, ModelForm
 from django.utils.translation import gettext_lazy as _
 from django import forms
 
@@ -7,7 +7,7 @@ from app.models import *
 
 class EdificioForm(ModelForm):
     class Meta:
-        model = Edificio 
+        model = Edificio
         fields = ['nombre', 'direccion', 'ciudad', 'tipo']
         labels = {
             'nombre': _("Ingrese el nombre"),
@@ -24,18 +24,36 @@ class EdificioForm(ModelForm):
         return valor
 
 
+class PropietarioForm(ModelForm):
+    class Meta:
+        model = Propietario
+        fields = ['nombre', 'apellido', 'cedula']
+        labels = {
+            'nombre': _("Ingrese el nombre"),
+            'apellido': _("Ingrese el apellido"),
+            'cedula': _("Ingrese la cedula"),
+        }
 
-class DeparatmentoForm(ModelForm):
+    def clean_cedula(self):
+        valor = self.cleaned_data['cedula']
+        if len(valor) != 10:
+            raise forms.ValidationError("La cedula debe tener 10 digitos")
+        return valor
+
+
+class DepartamentoForm(ModelForm):
     class Meta:
         model = Departamento
-        fields = ['nombrePropietario', 'costo', 'num_cuartos', 'edificio']
+        fields = ['propietario', 'costo', 'num_cuartos', 'edificio']
         labels = {
-            'nombrePropietario': _("Ingrese el nombre del propietario"),
+            'propietario': _("Ingrese el nombre del propietario"),
             'costo': _("Ingrese el costo"),
-            'num_cuartos': _("Ingrese el numero de cuartos"),
-            'edificio': _("Elija el edifico"),
-
+            'num_cuartos': _("Ingrese el número de cuartos"),
+            'edificio': _("Elija el edificio"),
         }
+
+    propietario = ModelChoiceField(
+        queryset=Propietario.objects.all(), label=_("Propietario"))
 
     def clean_propietario(self):
         valor = self.cleaned_data['nombrePropietario']
@@ -49,9 +67,10 @@ class DeparatmentoForm(ModelForm):
         if valor > 100000:
             raise forms.ValidationError("El costo es demaciado")
         return valor
-        
+
     def clean_cuartos(self):
         valor = self.cleaned_data['num_cuartos']
         if valor == 0 or valor > 7:
-            raise forms.ValidationError("El numero de cuartos no puede ser 0 o mayor de 7")
+            raise forms.ValidationError(
+                "El numero de cuartos no puede ser 0 o mayor de 7")
         return valor

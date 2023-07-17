@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Listado de Propietarios</title>
+  </head>
+  <body>
+    <h5>Listado de propietarios - {{numero_propietarios}}</h5>
+
+    {% for propietario in propietarios %}
+
+    <ol>
+      <li><b>Nombre: </b>{{propietario['nombre']}}</li>
+      <li><b>Dirección: </b>{{propietario['apellido']}}</li>
+      <li><b>Cédula: </b>{{propietario['cedula']}}</li>
+      <li><b>Total departamentos: </b>{{propietario['departamentos']}}</li>
+      <li><b>Edificios: </b>{{propietario['edificios']}}</li>
+    </ol>
+    <hr />
+    {% endfor%}
+  </body>
+</html>
